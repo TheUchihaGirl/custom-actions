@@ -1,12 +1,20 @@
-description: 'Whether to use the cache or not'
-required: false
-default: 'true'
+name: Cache Dependencies
+description: Cache dependencies to speed up workflows
+inputs:
+  cache-dependencies:
+    description: 'Whether to cache the dependencies or not'
+    required: false
+    default: 'true'
+  use-cache:
+    description: 'Whether to use the cache or not'
+    required: false
+    default: 'true'
 outputs:
   dummy-data:
     description: 'Whether the cache was used or not'
-    value: ${{ steps.install.outputs.dummy-value }}
+    value: ${{ steps.install.outputs.dummy-install-data }}
 runs:
-  using: 'composite'
+  using : 'composite'
   steps:
     - name: Cache dependencies
       id: cache
@@ -15,13 +23,13 @@ runs:
       with:
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      outputs:
-        dummy: 'Hello dummy'
-    - name: Install dependencies
+      run : |
+        echo "dummy-value=Hello dummy" >> $GITHUB_OUTPUT
+    -name : 'Install dependencies'
       id: install
       if: steps.cache.outputs.cache-hit != 'true' || inputs.use-cache != 'true'
-      run: |
+      run : |
         npm ci
+        echo "dummy-install-data=${{steps.cache.output.dummy-value}}" >> $GITHUB_OUTPUT
         echo "Hello ${{ steps.cache.outputs.dummy }}"
-      outputs:
-        dummy-value: ${{ steps.cache.outputs.dummy }}
+      shell: bash
