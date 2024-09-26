@@ -88,4 +88,4 @@ jobs:
           number1: ${{env.NUMBER1 }}
           number2: ${{env.NUMBER2 }}
       - name: Output result
-        run: 'echo "Result: ${{ steps.addition.outputs.result }}"''
+        run: 'echo "Result: ${{ steps.addition.outputs.result }}"'
