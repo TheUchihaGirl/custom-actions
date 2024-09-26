@@ -27,6 +27,7 @@ runs:
     - name: Set cache dummy value
       id: set-cache-value
       run: echo "dummy-value=Hello dummy" >> $GITHUB_OUTPUT
+      shell: bash
       
     - name: Install dependencies
       id: install
