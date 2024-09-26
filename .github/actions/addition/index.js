@@ -5,7 +5,7 @@ function run() {
     let secondNumber = core.getInput('secondNumber');
 
     let result = parseInt(firstNumber) + parseInt(secondNumber);
-
+    core.notice('The result is: ' + result);
     core.setOutput('result', result);
 }
 
