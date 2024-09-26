@@ -9,17 +9,16 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
+      - name: Cache and install dependencies
+        id : cache-and-install-deps
+        uses: ./.github/actions/cache-deps
         with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+          cache-dependencies: true
+          use-cache: true
       - name: Lint code
         run: npm run lint
+      - name : Output cache hit
+        run : 'echo "Output: ${{ steps.cache-and-install-deps.outputs.dummy-data }}"'
   test:
     runs-on: ubuntu-latest
     steps:

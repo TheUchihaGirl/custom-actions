@@ -1,0 +1,36 @@
+name: Cache Dependencies
+description: Cache dependencies to speed up workflows
+inputs:
+  cache-dependencies: :
+    description: 'Whether to cache the dependencies or not'
+    required: false
+    default: 'true'
+  use-cache:
+    description: 'Whether to use the cache or not'
+    required: false
+    default: 'true'
+outputs:
+  dummy-data:
+    description: 'Whether the cache was used or not'
+    value: ${{ steps.install.outputs.dummy-value }}
+runs:
+  using : 'composite'
+  steps:
+    - name: Cache dependencies
+      id: cache
+      if: inputs.cache-dependencies == 'true'
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      outputs:
+        dummy : 'Hello dummy'
+    -name : 'Install dependencies'
+      id: install
+      if: steps.cache.outputs.cache-hit != 'true' || inputs.use-cache != 'true'
+      outputs:
+        dummy-value: ${{ steps.cache.outputs.dummy }}
+      run : |
+        npm ci
+        echo "Hello ${{ steps.cache.outputs.dummy }}"
+      shell: bash
