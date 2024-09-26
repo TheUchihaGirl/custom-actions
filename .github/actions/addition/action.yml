@@ -1,0 +1,17 @@
+name : Demo JavaSCript Action
+description : Demo JavaScript action
+inputs:
+  number1:
+    description: 'First number'
+    required: false
+    default: '0'
+  number2:
+    description: 'Second number'
+    required: false
+    default: '0'
+outputs:
+  result:
+    description: 'Result of the addition'
+runs:
+  using: 'node18'
+  main: 'index.js'
