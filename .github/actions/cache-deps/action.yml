@@ -1,7 +1,7 @@
 name: Cache Dependencies
 description: Cache dependencies to speed up workflows
 inputs:
-  cache-dependencies: :
+  cache-dependencies:
     description: 'Whether to cache the dependencies or not'
     required: false
     default: 'true'
