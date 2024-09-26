@@ -14,7 +14,7 @@ outputs:
     description: 'Whether the cache was used or not'
     value: ${{ steps.install.outputs.dummy-install-data }}
 runs:
-  using : 'composite'
+  using: 'composite'
   steps:
     - name: Cache dependencies
       id: cache
@@ -23,13 +23,16 @@ runs:
       with:
         path: node_modules
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      run : |
-        echo "dummy-value=Hello dummy" >> $GITHUB_OUTPUT
-    -name : 'Install dependencies'
+      
+    - name: Set cache dummy value
+      id: set-cache-value
+      run: echo "dummy-value=Hello dummy" >> $GITHUB_OUTPUT
+      
+    - name: Install dependencies
       id: install
       if: steps.cache.outputs.cache-hit != 'true' || inputs.use-cache != 'true'
-      run : |
+      run: |
         npm ci
-        echo "dummy-install-data=${{steps.cache.output.dummy-value}}" >> $GITHUB_OUTPUT
-        echo "Hello ${{ steps.cache.outputs.dummy }}"
+        echo "dummy-install-data=${{ steps.set-cache-value.outputs.dummy-value }}" >> $GITHUB_OUTPUT
+        echo "Hello ${{ steps.set-cache-value.outputs.dummy-value }}"
       shell: bash
